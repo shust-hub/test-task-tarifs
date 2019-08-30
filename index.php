@@ -1,4 +1,5 @@
 <?php
+	//Скачивание файла
 	function getDataFile($url, $path, $fileName){
 		if (checkUrl($url)){
 			$path = $_SERVER['DOCUMENT_ROOT'] . $path . $fileName;
@@ -9,7 +10,7 @@
 		}
 	}
 
-
+	//Проверка наличия файла по указанному адресу
 	function checkUrl($url){
 		if (@fopen($url, "r")) {
 			return true;
@@ -19,6 +20,8 @@
 	}
 	
 	$dataFileJson = getDataFile('http://sknt.ru/job/frontend/data.json','/task-tariff/', 'data.json');
+
+	//Декодированные данные
 	$output_result_json = json_decode($dataFileJson);
 	
 ?>
@@ -33,13 +36,14 @@
 		<title>Тарифы</title>
 	</head>
 	<body>
+		<!-- группы тарифов -->
 		<section id ="groupTarif">
 			<div class="container">
 				<?php foreach($output_result_json->tarifs as $item):?>
 
 				<div class="tarifsItem">	
 					<div class="tarifsTitle">
-						<h2>Тариф <?php echo $item->title;?></h2>
+						<h2>Тариф "<?php echo $item->title;?>"</h2>
 					</div>
 					<hr>
 					<div class = "tarifsContent">
@@ -64,7 +68,7 @@
 						</div>
 						<div>
 							<b>
-								<?php echo(($item->tarifs[3]->price/$item->tarifs[3]->pay_period).'-'.($item->tarifs[0]->price/$item->tarifs[0]->pay_period)) ;?> &#8381/мес
+								<?php echo(($item->tarifs[3]->price/$item->tarifs[3]->pay_period).' – '.($item->tarifs[0]->price/$item->tarifs[0]->pay_period)) ;?> &#8381/мес
 							</b>
 						</div>
 						<div class = "arrow-right">
@@ -91,47 +95,47 @@
 			</div>
 		</section>
 
-
+		<!--  варанты тарифов -->
 		<section id ="varTarif">
 			<a name="varTarif"></a>
 			<?php foreach($output_result_json->tarifs as $item):?>
 				
-			<div class="Title">
-				<a name="<?php echo $item->tarifs[1]->ID;?>"></a>
-				<h2>Тариф <?php echo $item->title;?></h2>
-				<div class = "arrow-left">
-					<a href = "#"> < </a>
+				<div class="Title">
+					<a name="<?php echo $item->tarifs[1]->ID;?>"></a>
+					<h2>Тариф <?php echo $item->title;?></h2>
+					<div class = "arrow-left">
+						<a href = "#"> < </a>
+					</div>
 				</div>
-			</div>
 
-			<div class = "container">
-				<?php foreach($item->tarifs as $item2):?>
-				<div class="tarifsItem">
-					<div class="tarifsTitle">
-						<h3><?php echo $item2->title;?> </h3>
+				<div class = "container">
+					<?php foreach($item->tarifs as $item2):?>
+					<div class="tarifsItem">
+						<div class="tarifsTitle">
+							<h3><?php echo $item2->title;?> </h3>
+						</div>
+						<hr>
+						<div class="tarifsContent">
+							<div>
+								<b><?php echo ($item2->price/$item2->pay_period);?> &#8381/мес</b>
+							</div>
+							<div>
+								<p>Разовый платёж – <?php echo $item2->price;?> &#8381
+								<br>
+								Скидка – &#8381</p>
+							</div>
+							<div class = "arrow-right">
+								<a href = "#par<?php echo $item2->ID;?>"> > </a>
+							</div>
+						</div>
 					</div>
-					<hr>
-					<div class="tarifsContent">
-						<div>
-							<b><?php echo ($item2->price/$item2->pay_period);?> &#8381/мес</b>
-						</div>
-						<div>
-							<p>Разовый платёж - <?php echo $item2->price;?> &#8381
-							<br>
-							Скидка - &#8381</p>
-						</div>
-						<div class = "arrow-right">
-							<a href = "#par<?php echo $item2->ID;?>"> > </a>
-						</div>
-					</div>
+					<?php endforeach;?>
 				</div>
-				<?php endforeach;?>
-			</div>
 
 		<?php endforeach;?>
-		
 		</section>
 
+		<!-- параметры выбранного тарифа -->
 		<section id="parTarif">
 			<div class="Title">
 					<h2>Выбор тарифа</h2>
@@ -139,7 +143,7 @@
 						<a href = "#varTarif"> < </a>
 					</div>
 			</div>
-			
+
 			<div class="container">
 				<?php foreach($output_result_json->tarifs as $item):?>
 					<?php foreach($item->tarifs as $item2):?>
@@ -150,19 +154,24 @@
 							</div>
 							<hr>
 							<div>
-								<b>Период оплаты - <?php echo $item2->pay_period;?> мес
+								<b>Период оплаты – <?php echo $item2->pay_period;?> мес
 								<br>
 								<?php echo ($item2->price/$item2->pay_period);?> &#8381/мес</b>
 							</div>
 							<div>
-								<p>разовый платёж - <?php echo $item2->price;?> &#8381
+								<p>разовый платёж – <?php echo $item2->price;?> &#8381
 								<br>
-								со счёта спишется - <?php echo $item2->price;?> &#8381</p>
+								со счёта спишется – <?php echo $item2->price;?> &#8381</p>
 							</div>
 							<div>
-								<p>вступит в силу - сегодня
+								<p>вступит в силу – сегодня
 								<br>
-								активно до - <?php echo $item2->new_payday;?></p>
+								активно до - 
+								<?php 
+									$str = substr("$item2->new_payday",0,-5);
+									echo date('Y-m-d',(int)$str);
+									?>
+								</p>
 							</div>
 							<hr>
 							<button class = "tarifBtn">Выбрать</button>
