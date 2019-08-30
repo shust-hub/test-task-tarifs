@@ -34,7 +34,7 @@
 	</head>
 	<body>
 		<section id ="groupTarif">
-			<div class="tarifContent">
+			<div class="container">
 				<?php foreach($output_result_json->tarifs as $item):?>
 
 				<div class="tarifsItem">	
@@ -57,7 +57,6 @@
 						      echo "redSpeed";
 						      break;
 						  }
-
 						?>"
 						>
 						<?php echo $item->speed;?>
@@ -95,17 +94,17 @@
 
 		<section id ="varTarif">
 			<a name="varTarif"></a>
-			<div class = "tarifContent">
-				<?php foreach($output_result_json->tarifs as $item):?>
+			<?php foreach($output_result_json->tarifs as $item):?>
 				
-				<div class="Title">
-					<a name="<?php echo $item->tarifs[1]->ID;?>"></a>
-					<h2>Тариф <?php echo $item->title;?></h2>
-					<div class = "arrow-left">
-						<a href = "#"> < </a>
-					</div>
+			<div class="Title">
+				<a name="<?php echo $item->tarifs[1]->ID;?>"></a>
+				<h2>Тариф <?php echo $item->title;?></h2>
+				<div class = "arrow-left">
+					<a href = "#"> < </a>
 				</div>
+			</div>
 
+			<div class = "container">
 				<?php foreach($item->tarifs as $item2):?>
 				<div class="tarifsItem">
 					<div class="tarifsTitle">
@@ -128,18 +127,20 @@
 				</div>
 				<?php endforeach;?>
 			</div>
+
 		<?php endforeach;?>
+		
 		</section>
 
 		<section id="parTarif">
-			<div class="tarifContent">
-				<div class="Title">
+			<div class="Title">
 					<h2>Выбор тарифа</h2>
 					<div class = "arrow-left">
 						<a href = "#varTarif"> < </a>
 					</div>
-				</div>
-				
+			</div>
+			
+			<div class="container">
 				<?php foreach($output_result_json->tarifs as $item):?>
 					<?php foreach($item->tarifs as $item2):?>
 						<div class="tarifsItem">
@@ -164,7 +165,7 @@
 								активно до - <?php echo $item2->new_payday;?></p>
 							</div>
 							<hr>
-							<button>Выбрать</button>
+							<button class = "tarifBtn">Выбрать</button>
 						</div>
 
 					<?php endforeach;?>
